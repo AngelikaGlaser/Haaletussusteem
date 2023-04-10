@@ -1,35 +1,40 @@
 <?php
-include_once 'database.php';
-$result = mysqli_query($conn, "SELECT Vastanute_arv AS Kokku, Poolt_h_arv AS Poolt, Vastu_h_arv AS Vastu FROM TULEMUSED WHERE  ID_tulemused = (SELECT MAX(ID_tulemused) FROM TULEMUSED)");
+session_start();
+ 
+if (isset($_POST['start'])) {
+    // Reset session timer
+    $_SESSION['timer'] = time() + 600; // 10 min
 
-$row = mysqli_fetch_assoc($result);
-$Kokku = $row['Kokku'];
-$Poolt = $row['Poolt'];
-$Vastu = $row['Vastu'];
+    // Connect to database
+include_once 'database.php';
+
+// Call the stored procedure and insert the start time
+$sql = "CALL uus_haaletus(); INSERT INTO TULEMUSED (H_alguse_aeg) VALUES (NOW())";
+
+if (!mysqli_multi_query($conn, $sql)) {
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+}
+
+// Close database connection
+mysqli_close($conn);
+
+// Redirect to main page
+header('Location: add_vote.php');
+exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Results</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+	<title>Hääletamine</title>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container text-center">
-        <h1>Tulemused</h1>
-        <table>
-            <tr>
-                <th>Kokku</th>
-                <th>Poolt</th>
-                <th>Vastu</th>
-            </tr>
-            <tr>
-                <td><?php echo $Kokku; ?></td>
-                <td><?php echo $Poolt; ?></td>
-                <td><?php echo $Vastu; ?></td>
-            </tr>
-        </table>
-        <a href="add_vote.php">Uuesti h채채letama</a>
-        <a href="change.php">Muuda h채채lt</a>
-    </div>
+	<h1>H채채letamine</h1>
+	<form method="post" action="">
+		<input type="submit" name="start" value="Start">
+	</form>
 </body>
 </html>
