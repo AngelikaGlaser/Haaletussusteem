@@ -11,6 +11,7 @@ $Vastu = $row['Vastu'];
 <html>
 <head>
     <title>Results</title>
+    <meta charset='utf-8'>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,8 +29,8 @@ $Vastu = $row['Vastu'];
                 <td><?php echo $Vastu; ?></td>
             </tr>
         </table>
-        <a href="add_vote.php">Uuesti h채채letama</a>
-        <a href="change.php">Muuda h채채lt</a>
+        <a href="add_vote.php">Uuesti hääletama</a>
+        <a href="change.php">Muuda häält</a>
     </div>
 </body>
 </html>
